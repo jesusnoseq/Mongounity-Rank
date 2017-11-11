@@ -1,4 +1,6 @@
+const SHA256 = require("crypto-js/sha256");
 const TeamRank = require('../models/team_rank');
+const conf = require('../conf.js');
 
 exports.getTeamRank = function (req, res, next) {
   TeamRank.find({}, { '_id': 0, '__v':0}, function(err, teams){
@@ -11,24 +13,20 @@ exports.getTeamRank = function (req, res, next) {
 exports.postTeamRank = function (req, res, next){
   const team = req.body.team;
   const score = req.body.score;
-  const key = req.body.key;
+  const sign = req.body.sign;
+
 
   //validation
-  if(!team || !score || !key){
+  if(!team || !score || !sign){
     return res.status(422).send({error: 'You must provide team, score and key'})
   }
 
+  // Client verification
+  const hash = SHA256((conf.salt+team+score)).toString();
 
-/*
-bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
-    // Store hash in your password DB.
-});
-
-bcrypt.compare(myPlaintextPassword, hash, function(err, res) {
-    // res == true
-});
-*/
-
+  if(hash !== sign){
+    return res.status(404).send({error: 'Invalid sign'})
+  }
 
   //see if user already exists
   TeamRank.findOneAndUpdate({team: team},{$inc: {score: score}}, function (err, existingTeam) {
