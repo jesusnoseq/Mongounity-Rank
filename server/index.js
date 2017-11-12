@@ -6,8 +6,6 @@ const router = require('./router');
 const app = express();
 const mongoose = require('mongoose');
 const cors = require('cors');
-const SHA256 = require('crypto-js/sha256');
-
 const conf = require('./conf');
 
 
@@ -26,12 +24,3 @@ const server = http.createServer(app);
 server.listen(port);
 
 console.log('Server listening on port:', port);
-/*
-const salt="X$2a$10$vDDYTZC4jRmpBOLkcaTw.";
-console.log("msj: "+SHA256(salt));
-console.log("msj: "+SHA256(new Buffer(salt).toString('base64').toString('utf8')));
-console.log("msj: "+SHA256(new Buffer(salt).toString('ascii')));
-console.log("msj: "+SHA256(new Buffer(salt).toString('utf8')));
-console.log("msj: "+SHA256(salt));
-*/
-//Buffer.from(salt, 'base64').toString('ascii'));
