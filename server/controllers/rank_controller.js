@@ -5,6 +5,7 @@ const conf = require('../conf.js');
 exports.getTeamRank = function (req, res, next) {
   TeamRank.find({}, { '_id': 0, '__v':0}, function(err, teams){
         if(err){ return next(err); }
+
         res.send(teams);
   });
 }
@@ -25,7 +26,7 @@ exports.postTeamRank = function (req, res, next){
   const hash = SHA256((conf.salt+team+score)).toString();
 
   if(hash !== sign){
-    return res.status(404).send({error: 'Invalid sign'})
+    return res.status(403).send({error: 'Invalid sign'})
   }
 
   //see if user already exists
