@@ -35,7 +35,6 @@ exports.postTeamRank = function (req, res, next){
 
     //if the team not exists them it is created
     if(!existingTeam){
-      console.log("Creating a new team");
       const teamRank = new TeamRank({
         team: team,
         score: score
@@ -46,7 +45,6 @@ exports.postTeamRank = function (req, res, next){
         return res.json({success: true});
       });
     }else{
-      console.log("updating team");
       return res.json({success: true});
     }
 
